@@ -1,0 +1,40 @@
+
+name: Build Nintendo DS ROM
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitarm:latest
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Configure Nintendo DS build
+        run: |
+          cat > Makefile <<'EOF'
+          TARGET := pixel_quest
+          BUILD := build
+          SOURCES := source
+          DATA :=
+          GRAPHICS :=
+          INCLUDES :=
+          LIBS := -lnds9
+          include $(DEVKITPRO)/libnds/Makefile
+          EOF
+
+      - name: Compile ROM
+        run: make
+
+      - name: Upload NDS file
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-quest-nds
+          path: pixel_quest.nds
+          if-no-files-found: error
