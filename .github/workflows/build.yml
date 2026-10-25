@@ -16,7 +16,10 @@ jobs:
       - name: Get source code
         uses: actions/checkout@v4
 
-      - name: Install Nintendo DS tools
+      - name: - name: Install Nintendo DS tools
+        run: |
+          dkp-pacman -Sy --noconfirm
+          dkp-pacman -S --noconfirm nds-dev
         run: |
           pacman -Sy --noconfirm
           pacman -S --noconfirm nds-dev
