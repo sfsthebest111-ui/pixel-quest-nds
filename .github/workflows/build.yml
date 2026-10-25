@@ -16,16 +16,21 @@ jobs:
       - name: Get source code
         uses: actions/checkout@v4
 
-      - name: Configure Nintendo DS build
+      - name: Install Nintendo DS tools
+        run: |
+          pacman -Sy --noconfirm
+          pacman -S --noconfirm nds-dev
+
+      - name: Configure build
         run: |
           cat > Makefile <<'EOF'
-          TARGET := pixel_quest
-          BUILD := build
-          SOURCES := source
-          DATA :=
-          GRAPHICS :=
-          INCLUDES :=
-          LIBS := -lnds9
+          export TARGET := pixel_quest
+          export BUILD := build
+          export SOURCES := source
+          export DATA :=
+          export GRAPHICS :=
+          export INCLUDES :=
+          export LIBS := -lnds9
           include $(DEVKITPRO)/libnds/Makefile
           EOF
 
